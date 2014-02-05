@@ -1,6 +1,7 @@
 #ifndef CONNECT4_H
 #define CONNECT4_H
 
+#include "defines.h"
 #include "point.h"
 #include "board.h"
 #include "move.h"

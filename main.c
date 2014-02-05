@@ -1,11 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include "connect4.h"
 
 int main(int argc, char **argv) 
 {
 	srand(time(NULL));
-	board_type *b = createBoard(7, 6);
+	board_t *b = createBoard(7, 6);
 
 	int input;
 	
