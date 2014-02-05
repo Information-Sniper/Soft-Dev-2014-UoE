@@ -11,7 +11,7 @@ SRC= \
 	main.c \
 	point.c \
 	board.c \
-	move.c
+	move.c \
 	game.c
 
 INC= \
