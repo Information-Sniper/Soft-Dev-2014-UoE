@@ -3,35 +3,35 @@
 #include "board.h"
 #include "move.h"
 
-int validMove(board_t *b, int column)
+int valid_move(board_t *b, int column)
 {
 	return b->heights[column] < b->rows;
 }
 
-int validMovesLeft(board_t *b)
+int valid_moves_left(board_t *b)
 {
 	return b->lm < ((b->cols * b->rows) -1);
 }
 
-void makeMove(board_t *b, int column)
+void make_move(board_t *b, int column)
 {
-	setState(b->grid[column][b->heights[column]], b->cp);
+	set_state(b->grid[column][b->heights[column]], b->current_player);
 
 	b->heights[column]++;
 	b->lm++;
 	b->moves[b->lm] = column;
-	b->cp = -b->cp;
+	b->current_player = -b->current_player;
 }
 
-void undoMove(board_t *b)
+void undo_move(board_t *b)
 {
-	setState(b->grid[b->moves[b->lm]][b->heights[b->moves[b->lm]] - 1], (EMPTY));
+	set_state(b->grid[b->moves[b->lm]][b->heights[b->moves[b->lm]] - 1], (EMPTY));
 	b->heights[b->moves[b->lm]]--;
 	b->lm--;
-	b->cp = -b->cp;
+	b->current_player = -b->current_player;
 }
 
-int getRandomPlayerMove(board_t *b)
+int get_random_player_move(board_t *b)
 {
 	int val = -1;
 	int possible[7];
@@ -39,7 +39,7 @@ int getRandomPlayerMove(board_t *b)
 	
 	for (i = 0; i < 7; i++)
 	{
-		if (validMove(b, i))
+		if (valid_move(b, i))
 		{
 			possible[i] = 1;
 		}
@@ -62,44 +62,46 @@ int getRandomPlayerMove(board_t *b)
 }
 
 // should return a number
-int getReasonedMove(board_t *cB)
+int get_reasoned_move(board_t *b)
 {
 	int moves[7];
 	int highest = 0;
 	int i;
+	
 	for(i = 0; i < 7; i++)
 	{
 		moves[i] = INT_MIN;
 		
-		if (validMove(cB, i))
+		if (valid_move(b, i))
 		{
-			makeMove(cB, i);
-			moves[i] = minValue(cB, 4);
+			make_move(b, i);
+			moves[i] = min_value(b, 4);
 			
 			if (moves[i] >= moves[highest])
 			{
 				highest = i;
 			}
-			undoMove(cB);
+			undo_move(b);
 		} 
 	}
 	return highest;
 }
 
-int getStrength(board_t *b)
+int get_strength(board_t *b)
 {
 	int sum = 0;
 	int weights[] = {0, 1, 10, 50, 600};
 	int i;
+	
 	for (i = 0; i < 69; i++)
 	{
-		sum += (getScore(b->cl[i]) > 0) ? weights[abs(getScore(b->cl[i]))] : -weights[abs(getScore(b->cl[i]))];
+		sum += (get_score(b->cl[i]) > 0) ? weights[abs(get_score(b->cl[i]))] : -weights[abs(get_score(b->cl[i]))];
 	}
-	return sum + (b->cp == PLAYER_ONE ? 16 : -16);
+	return sum + (b->current_player == PLAYER_ONE ? 16 : -16);
 }
 
 // don't change this unless you understand it
-int minValue(board_t *cB, int ply)
+int min_value(board_t *b, int ply)
 {
 	int moves[7];
 	int lowest = 0;
@@ -109,31 +111,31 @@ int minValue(board_t *cB, int ply)
 	{
 		moves[i] = INT_MAX;
 		
-		if (validMove(cB, i))
+		if (valid_move(b, i))
 		{
-			makeMove(cB, i);
+			make_move(b, i);
 			
-			if ((winnerIs(cB) == 0) && ply > 0)
+			if ((winner_is(b) == 0) && ply > 0)
 			{
-				moves[i] = maxValue(cB, ply - 1);
+				moves[i] = max_value(b, ply - 1);
 			}
 			else 
 			{
-				moves[i] = -getStrength(cB);
+				moves[i] = -get_strength(b);
 			}
 			
 			if (moves[i] < moves[lowest])
 			{
 				lowest = i;
 			}
-			undoMove(cB);
+			undo_move(b);
 		}
 	}
 	return moves[lowest];
 }
 
 //careful with this
-int maxValue(board_t *cB, int ply)
+int max_value(board_t *b, int ply)
 {
 	int moves[7];
 	int highest = 0;
@@ -142,17 +144,17 @@ int maxValue(board_t *cB, int ply)
 	for (i = 0; i < 7; i++)
 	{
 		moves[i] = INT_MAX;
-		if (validMove(cB, i))
+		if (valid_move(b, i))
 		{
-			makeMove(cB, i);
+			make_move(b, i);
 
-			if ((winnerIs(cB) == 0) && ply > 0)
+			if ((winner_is(b) == 0) && ply > 0)
 			{
-				moves[i] = minValue(cB, ply - 1);
+				moves[i] = min_value(b, ply - 1);
 			}
 			else
 			{
-				moves[i] = -getStrength(cB);
+				moves[i] = -get_strength(b);
 			}
 
 			if (moves[i] < moves[highest])
@@ -160,7 +162,7 @@ int maxValue(board_t *cB, int ply)
 				highest = i;
 			}
 			
-			undoMove(cB);
+			undo_move(b);
 		}
 	}
 	return moves[highest];

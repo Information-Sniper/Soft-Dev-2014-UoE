@@ -6,23 +6,23 @@
 int main(int argc, char **argv) 
 {
 	srand(time(NULL));
-	board_t *b = createBoard(7, 6);
+	board_t *b = create_board(7, 6);
 
 	int input;
 	
-	while((winnerIs(b) == 0) && validMovesLeft(b))
+	while((winner_is(b) == 0) && valid_moves_left(b))
 	{
 		if(cp(b) == PLAYER_ONE)	
 		{
 			scanf("%d", &input);
-			makeMove(b, input);// Make it so!
+			make_move(b, input);// Make it so!
 		}
 		else
 		{
-			makeMove(b, getReasonedMove(b));// Make it so!
+			make_move(b, get_reasoned_move(b));// Make it so!
 		}
 
-		printf("%s\n", toString(b));
+		printf("%s\n", to_string(b));
 	}
 	
 	return 0;

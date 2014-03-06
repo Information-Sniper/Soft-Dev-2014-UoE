@@ -4,10 +4,10 @@
 #include "point.h"
 #include "board.h"
 
-int   getScore(point_t *points[]);
-int   winnerIs(board_t *b);
-int   cp(board_t *b);
-char *toString(board_t *b);
+int   get_score(point_t *points[]);
+int   winner_is(board_t *b);
+int   get_current_player(board_t *b);
+char *to_string(board_t *b);
 
 #endif // GAME_H
 

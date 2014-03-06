@@ -3,43 +3,47 @@
 #include "point.h"
 #include "board.h"
 
-board_t *createBoard(int a, int b)
+board_t *create_board(int x, int y)
 {
-	board_t *p = (board_t*) malloc(sizeof(board_t));
-	p->cols = a;
-	p->rows = b;
-	p->lm = -1;
-	p->cp = PLAYER_ONE;
-	p->heights = (int*) malloc(p->cols * sizeof(int));
-	p->grid = (point_t***) malloc(p->cols * sizeof(point_t**));
-	int x;
-	int y;
+	board_t *b = (board_t*) malloc(sizeof(board_t));
+	int i;
+	int j;
 	
-	for (x = 0; x < p->cols; x++)
+	b->cols = x;
+	b->rows = y;
+	b->lm = -1;
+	b->current_player = PLAYER_ONE;
+	b->heights = (int*) malloc(x * sizeof(int));
+	b->grid = (point_t***) malloc(x * sizeof(point_t**));
+
+	
+	for (i = 0; i < x; i++)
 	{
-		p->grid[x] = (point_t**) malloc(p->rows * sizeof(point_t*));
-		p->heights[x] = 0;
-		for (y = 0; y < p->rows; y++)
+		b->grid[i] = (point_t**) malloc(y * sizeof(point_t*));
+		b->heights[i] = 0;
+		
+		for (j = 0; j < y; j++)
 		{
-			p->grid[x][y] = newPoint(x, y);
+			b->grid[i][j] = new_point(i, j);
 		}
 	}
-	p->moves = (int*) malloc(p->cols * p->rows * sizeof(int));
+	b->moves = (int*) malloc(x * y * sizeof(int));
 
-	p->cl = generateCL(p->grid);
-	return p;
+	b->cl = generate_CL(b->grid);
+	
+	return b;
 }
 
-void deleteboard(board_t *p)
+void delete_board(board_t *b)
 {
-	free(p->cl);
-	free(p->grid);
-	free(p->heights);
-	free(p->moves);
-	free(p);
+	free(b->cl);
+	free(b->grid);
+	free(b->heights);
+	free(b->moves);
+	free(b);
 }
 
-point_t ***generateCL(point_t ***grid)
+point_t ***generate_CL(point_t ***grid)
 {
 	point_t ***lines = (point_t***) malloc(69 * sizeof(point_t**));
 	int i;

@@ -8,10 +8,10 @@ typedef struct point
 	int state;
 } point_t;
 
-point_t *newPoint(int a, int b);
-void     deletepoint(point_t *p);
-void     setState(point_t *a, int player);
-int      getState(point_t *a);
-int      equalsPosition(point_t *a, point_t *b);
+point_t *new_point(int x, int y);
+void     delete_point(point_t *p);
+void     set_state(point_t *p, int player);
+int      get_state(point_t *p);
+int      equals_position(point_t *a, point_t *b);
 
 #endif // POINT_H

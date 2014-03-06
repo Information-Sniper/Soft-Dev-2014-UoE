@@ -4,27 +4,27 @@
 #include "board.h"
 #include "game.h"
 
-int getScore(point_t *points[])
+int get_score(point_t *points[])
 {
-	int playerone = 0;
-	int playertwo = 0;
+	int player_1 = 0;
+	int player_2 = 0;
 	int i;
 	
 	for (i = 0; i < 4; i++)
 	{
-		if (getState(points[i]) == PLAYER_ONE)
+		if (get_state(points[i]) == PLAYER_ONE)
 		{
-			playerone++;
+			player_1++;
 		}
-		else if (getState(points[i]) == PLAYER_TWO)
+		else if (get_state(points[i]) == PLAYER_TWO)
 		{
-			playertwo++;
+			player_2++;
 		}
 	}
 
-	if ((playerone + playertwo > 0) && (!(playerone > 0 && playertwo > 0)))
+	if ((player_1 + player_2 > 0) && (!(player_1 > 0 && player_2 > 0)))
 	{
-		return (playerone != 0) ? playerone : playertwo;
+		return (player_1 != 0) ? player_1 : player_2;
 	}
 	else
 	{
@@ -47,17 +47,17 @@ int getScore(point_t *points[])
 */
 }
 
-int winnerIs(board_t *b)
+int winner_is(board_t *b)
 {
 	int i;
 	
 	for (i = 0; i < 69; i++)
 	{
-		if (getScore(b->cl[i]) == 4)
+		if (get_score(b->cl[i]) == 4)
 		{
 			return PLAYER_ONE;
 		}
-		else if (getScore(b->cl[i]) == -4)
+		else if (get_score(b->cl[i]) == -4)
 		{
 			return PLAYER_TWO;
 		}
@@ -65,28 +65,28 @@ int winnerIs(board_t *b)
 	return 0;
 }
 
-int cp(board_t *b)
+int get_current_player(board_t *b)
 {
-	return b->cp;
+	return b->current_player;
 }
 
-char *toString(board_t *b)
+char *to_string(board_t *b)
 {
 	char *temp = (char*) malloc(b->rows * (b->cols + 1) * sizeof(char) + 1);
 
 	char *curr = temp;
-	int y;
 	int x;
+	int y;
 	
 	for (y = b->rows - 1; y > -1; y--)
 	{
 		for (x = 0; x < b->cols; x++)
 		{
-			if (getState(b->grid[x][y]) == EMPTY)
+			if (get_state(b->grid[x][y]) == EMPTY)
 			{
 				*curr = '-';
 			}
-			else if (getState(b->grid[x][y]) == PLAYER_ONE)
+			else if (get_state(b->grid[x][y]) == PLAYER_ONE)
 			{
 				*curr = 'O';
 			}

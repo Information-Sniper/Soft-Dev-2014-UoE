@@ -14,12 +14,16 @@ typedef struct board
 	int *moves;
 	int lm;
 
-	int cp;
+	int current_player;
 	point_t ***cl;
 } board_t;
 
-board_t   *createBoard(int a, int b);
-void       deleteboard(board_t *p);
-point_t ***generateCL(point_t ***grid);
+board_t   *create_board(int x, int y);
+void       delete_board(board_t *b);
+point_t ***generate_CL(point_t ***grid);
+
+
+/* cl = connect line ?? */
+
 
 #endif // BOARD_H
