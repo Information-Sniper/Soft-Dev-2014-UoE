@@ -4,21 +4,6 @@
 #include "board.h"
 #include "game.h"
 
-int equalsPosition(point_t *a, point_t *b)
-{
-	return a->x == b->x && a->y == b->y;
-}
-
-void setState(point_t *a, int player)
-{
-	a->state = player;
-}
-
-int getState(point_t *a)
-{
-	return a->state;
-}
-
 int getScore(point_t *points[])
 {
 	int playerone = 0;
@@ -28,9 +13,13 @@ int getScore(point_t *points[])
 	for (i = 0; i < 4; i++)
 	{
 		if (getState(points[i]) == PLAYER_ONE)
+		{
 			playerone++;
+		}
 		else if (getState(points[i]) == PLAYER_TWO)
+		{
 			playertwo++;
+		}
 	}
 
 	if ((playerone + playertwo > 0) && (!(playerone > 0 && playertwo > 0)))
@@ -41,6 +30,21 @@ int getScore(point_t *points[])
 	{
 		return 0;
 	}
+	
+/*	
+	if (player_1 > 0 && player_2 == 0)
+	{
+		return player_1;
+	}
+	else if (player_2 > 0 && player_1 == 0)
+	{
+		return player_2;
+	}
+	else
+	{
+		return 0;
+	}
+*/
 }
 
 int winnerIs(board_t *b)

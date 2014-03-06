@@ -15,3 +15,18 @@ void deletepoint(point_t *p)
 {
 	free(p);
 }
+
+int equalsPosition(point_t *a, point_t *b)
+{
+	return a->x == b->x && a->y == b->y;
+}
+
+void setState(point_t *a, int player)
+{
+	a->state = player;
+}
+
+int getState(point_t *a)
+{
+	return a->state;
+}

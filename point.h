@@ -10,5 +10,8 @@ typedef struct point
 
 point_t *newPoint(int a, int b);
 void     deletepoint(point_t *p);
+void     setState(point_t *a, int player);
+int      getState(point_t *a);
+int      equalsPosition(point_t *a, point_t *b);
 
 #endif // POINT_H
