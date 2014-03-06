@@ -45,19 +45,18 @@ void delete_board(board_t *b)
 
 point_t ***generate_CL(point_t ***grid)
 {
-	point_t ***lines = (point_t***) malloc(69 * sizeof(point_t**));
+	point_t ***lines = (point_t***) malloc(POS_COMBOS * sizeof(point_t**));
 	int i;
-	
-	for (i = 0; i < 69; i++)
-	{
-		lines[i] = (point_t**) malloc(4 * sizeof(point_t*));
-	}
-
 	int count = 0;
 	int y;
 	int x;
 	int t;
 	
+	for (i = 0; i < POS_COMBOS; i++)
+	{
+		lines[i] = (point_t**) malloc(4 * sizeof(point_t*));
+	}
+
 	for (y = 0; y < 6; y++)
 	{
 		for (x = 0; x < 4; x++)

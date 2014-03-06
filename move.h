@@ -11,7 +11,6 @@ int  get_random_player_move(board_t *b);
 int  get_reasoned_move(board_t *b);
 int  get_strength(board_t *b);
 int  min_value(board_t *b, int ply);
-int  max_value(board_t *b, int ply);
 
 /* ply = ?? */
 

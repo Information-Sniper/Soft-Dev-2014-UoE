@@ -368,7 +368,7 @@ int minValue(board_type *cB, int ply)
 			{
 				moves[i] = maxValue(cB, ply - 1);
 			}
-			else 
+			else
 			{
 				moves[i] = -getStrength(cB);
 			}
@@ -377,6 +377,7 @@ int minValue(board_type *cB, int ply)
 			{
 				lowest = i;
 			}
+			
 			undoMove(cB);
 		}
 	}
@@ -393,6 +394,7 @@ int maxValue(board_type *cB, int ply)
 	for (i = 0; i < 7; i++)
 	{
 		moves[i] = INT_MAX;
+		
 		if (validMove(cB, i))
 		{
 			makeMove(cB, i);

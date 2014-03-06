@@ -51,7 +51,7 @@ int winner_is(board_t *b)
 {
 	int i;
 	
-	for (i = 0; i < 69; i++)
+	for (i = 0; i < POS_COMBOS; i++)
 	{
 		if (get_score(b->cl[i]) == 4)
 		{
@@ -62,7 +62,8 @@ int winner_is(board_t *b)
 			return PLAYER_TWO;
 		}
 	}
-	return 0;
+	
+	return NONE;
 }
 
 int get_current_player(board_t *b)

@@ -23,7 +23,9 @@ void       delete_board(board_t *b);
 point_t ***generate_CL(point_t ***grid);
 
 
-/* cl = connect line ?? */
+/* cl = connect line ?? 
+ * lm = l? moves ??
+ */
 
 
 #endif // BOARD_H
