@@ -43,6 +43,10 @@ void delete_board(board_t *b)
 	free(b);
 }
 
+/* 
+ * creates all possible win combinations
+ * currently hardcoded for a 7x6 board
+ */
 point_t ***generate_CL(point_t ***grid)
 {
 	point_t ***lines = (point_t***) malloc(POS_COMBOS * sizeof(point_t**));
@@ -56,21 +60,27 @@ point_t ***generate_CL(point_t ***grid)
 	{
 		lines[i] = (point_t**) malloc(4 * sizeof(point_t*));
 	}
-
+	
+	/* creates all horizontal win combinations */
 	for (y = 0; y < 6; y++)
 	{
 		for (x = 0; x < 4; x++)
 		{
+		//	lines[count] = (point_t**) malloc(4 * sizeof(point_t*));
 			point_t **temp = (point_t**) malloc(4 * sizeof(point_t*));
+
 			for (i = x; i < x + 4; i++)
 			{
+			//	lines[count][i - x] = grid[i][y];
 				temp[i - x] = grid[i][y];
 			}
 			lines[count] = temp;
 			count++;			
 		}
 	}
-
+	
+	
+	/* creates all vertical win combinations */
 	for (x = 0; x < 7; x++)
 	{
 		for (y = 0; y < 3; y++)
@@ -86,6 +96,7 @@ point_t ***generate_CL(point_t ***grid)
 
 	}
 
+	/* creates all "/" diagonal win combinations */
 	for (x = 0; x < 4; x++)
 	{
 		for (y = 0; y < 3; y++)
@@ -100,6 +111,7 @@ point_t ***generate_CL(point_t ***grid)
 		}
 	}
 	
+	/* creates all "\" diagonal win combinations */
 	for (x = 0; x < 4; x++)
 	{
 		for (y = 5; y > 2; y--)

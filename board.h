@@ -6,16 +6,13 @@
 typedef struct board
 {
 	point_t ***grid;
-	int *heights;
-
-	int cols;
-	int rows;
-
-	int *moves;
-	int lm;
-
-	int current_player;
 	point_t ***cl;
+	int       *heights;
+	int       *moves;
+	int        cols;
+	int        rows;
+	int        last_move;
+	int        cur_plr;
 } board_t;
 
 board_t   *create_board(int x, int y);
@@ -24,7 +21,6 @@ point_t ***generate_CL(point_t ***grid);
 
 
 /* cl = connect line ?? 
- * lm = l? moves ??
  */
 
 
