@@ -1,27 +1,36 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include "point.h"
+/*
+ * board_t: represents the game board
+ *
+ * grid:		2D array of size [X_DIM][Y_DIM]. It's the actual game board.
+ * moves:		1D array of length [X_DIM * Y_DIM]. 
+ *				ith cell keeps the column played on the ith move
+ * heights:		1D array of length [X_DIM]. Keeps the height of each column
+ * cur_plr:		keeps track of the current player
+ * last_move:	keeps last move's number.
+ */
 
 typedef struct board
 {
-	point_t ***grid;
-	point_t ***cl;
-	int       *heights;
-	int       *moves;
-	int        cols;
-	int        rows;
-	int        last_move;
-	int        cur_plr;
+	POINT grid[X_DIM][Y_DIM];
+	INT8  moves[X_DIM * Y_DIM];
+	INT8  heights[X_DIM];
+	INT8  cur_plr;
+	short last_move;
 } board_t;
 
-board_t   *create_board(int x, int y);
-void       delete_board(board_t *b);
-point_t ***generate_CL(point_t ***grid);
+/* Initializes the board */
+void board_init((board_t *b);
 
+/* Prints the curent state of the board */
+void board_display(const board_t *b);
 
-/* cl = connect line ?? 
- */
+/* Sets point (x,y) to "player". Returns error value */
+int board_set_point(board_t *b, INT8 x, INT8 y, INT8 player);
 
+/* Outputs point (x,y)'s state to "p". Returns error value */
+int board_get_point(POINT *p, const board_t *b, INT8 x, INT8 y);
 
 #endif // BOARD_H
