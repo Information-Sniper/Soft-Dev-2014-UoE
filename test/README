@@ -1,0 +1,47 @@
+***** Building the CUnit framework *****
+
+1) unzip using
+	tar xvfj CUnit-2.1-2-src.tar.bz2
+	
+2) cd CUnit-2.1-2
+
+***WARNING*** all folders in current path MUST NOT have spaces
+in order for configure to work properly
+
+
+3)
+ ** if you have su privileges **
+
+	sh ./configure
+	(This will install the CUnit files in
+	 /usr/local/bin,  /usr/local/man, etc)
+ 
+**
+ * if you don't have su privileges
+ * or want to install in another directory
+**
+
+	sh ./configure --prefix=PATH
+	(where PATH is the equivalent of /usr/local)
+
+4) make
+
+Optional step
+
+	make check
+	(to run some tests)
+
+5) make install
+
+for the purposes of the assignment CUnit was installed using:
+	sh ./configure --prefix=/Home/s1364069/local
+
+Please change the Makefile accordingly to correctly 
+point to the CUnit include files and library
+
+6) cd ..
+
+***** Building the Connect 4 tests *****
+
+1) make
+2) ./test_connect4 (to run the tests)

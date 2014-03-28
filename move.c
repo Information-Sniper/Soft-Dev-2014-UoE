@@ -1,6 +1,7 @@
 #include <limits.h>
 #include "defines.h"
 #include "board.h"
+#include "game.h"
 #include "move.h"
 
 INT8 valid_move(const board_t *b, INT8 col)
@@ -35,11 +36,11 @@ int make_move(board_t *b, INT8 col)
 	return error;
 }
 
-int get_reasoned_move(board_t *b)
+INT8 get_reasoned_move(board_t *b)
 {
-	int moves[COLS];
-	int highest = 0;
-	int i;
+	int  moves[COLS];
+	INT8 highest = 0;
+	INT8 i;
 	
 	for(i = 0; i < COLS; i++)
 	{
@@ -230,9 +231,9 @@ static int get_strength(const board_t *b)
 
 static int min_value(board_t *b, INT8 ply)
 {
-	int moves[COLS];
-	int lowest = 0;
-	int i;
+	int  moves[COLS];
+	int  lowest = 0;
+	INT8 i;
 	
 	for (i = 0; i < COLS; i++)
 	{

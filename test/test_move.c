@@ -81,6 +81,11 @@ void test_make_move(void)
 	CU_ASSERT_EQUAL(b.cur_plr, PLAYER_ONE);
 }
 
+void test_get_reasoned_move(void)
+{
+	CU_FAIL("Not implemented");
+}
+
 void test_undo_move(void)
 {
 	board_t b;
@@ -134,7 +139,7 @@ void test_get_score(void)
 	make_move(&b, 2); // O
 	make_move(&b, 1); // X
 	
-	/* check the score from (0, 0) to (0, 4) - vertical */
+	/* check the score from (0, 0) to (0, 2) - vertical */
 	p = &(b.grid[0][0]);
 	CU_ASSERT_EQUAL(get_score(p, 1), 4);
 	
@@ -143,27 +148,11 @@ void test_get_score(void)
 	
 	p = &(b.grid[0][2]);
 	CU_ASSERT_EQUAL(get_score(p, 1), 2);
-/*	
-	p = &(b.grid[0][3]);
-	CU_ASSERT_EQUAL(get_score(p, 1), 1);
-	
-	p = &(b.grid[0][4]);
-	CU_ASSERT_EQUAL(get_score(p, 1), 0);
-*/
-	
-	/* check the score from (3, 0) to (6, 0) - horizontal */
+
+	/* check the score for (3, 0) - horizontal */
 	p = &(b.grid[3][0]);
 	CU_ASSERT_EQUAL(get_score(p, ROWS), -4);
-/*	
-	p = &(b.grid[4][0]);
-	CU_ASSERT_EQUAL(get_score(p, ROWS), -3);
-	
-	p = &(b.grid[5][0]);
-	CU_ASSERT_EQUAL(get_score(p, ROWS), -2);
-	
-	p = &(b.grid[6][0]);
-	CU_ASSERT_EQUAL(get_score(p, ROWS), -1);
-*/	
+
 	/* check score on (1, 0) and (2, 0) - horizontal */
 	p = &(b.grid[1][0]);
 	CU_ASSERT_EQUAL(get_score(p, ROWS), 0);
@@ -198,75 +187,7 @@ void test_get_strength(void)
 	CU_ASSERT_EQUAL(get_strength(&b), -70);
 }
 
-
-
-
-
-
-
-
-
-/*
-
-
-
-// don't change this unless you understand it
-static int min_value(board_t *b, INT8 ply)
+void test_min_value(void)
 {
-	int moves[COLS];
-	int lowest = 0;
-	int i;
-	
-	for (i = 0; i < COLS; i++)
-	{
-		moves[i] = INT_MAX;
-		
-		if (valid_move(b, i))
-		{
-			make_move(b, i);
-			
-			if ((winner_is(b) == NONE) && ply > 0)
-			{
-				moves[i] = min_value(b, ply - 1);
-			}
-			else 
-			{
-				moves[i] = -get_strength(b);
-			}
-			
-			if (moves[i] < moves[lowest])
-			{
-				lowest = i;
-			}
-			undo_move(b);
-		}
-	}
-	return moves[lowest];
+	CU_FAIL("Not implemented");
 }
-
-int get_reasoned_move(board_t *b)
-{
-	int moves[COLS];
-	int highest = 0;
-	int i;
-	
-	for(i = 0; i < COLS; i++)
-	{
-		moves[i] = INT_MIN;
-		
-		if (valid_move(b, i))
-		{
-			make_move(b, i);
-			moves[i] = min_value(b, 4);  // check this shit
-
-			if (moves[i] >= moves[highest])
-			{
-				highest = i;
-			}
-			undo_move(b);
-		} 
-	}
-	return highest;
-}
-*/
-

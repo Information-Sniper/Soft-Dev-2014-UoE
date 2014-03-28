@@ -3,8 +3,12 @@ EXE = test_connect4
 
 MF = Makefile
 
+# Change the include path (-I) to point 
+# to the CUnit include files
 CFLAGS = -O0 -DUNIT_TEST -I~/local/include
 
+# Change the library path (-L) to point 
+# to the CUnit include files
 LFLAGS = -L~/local/lib -lcunit
 
 SRC = \

@@ -44,6 +44,8 @@ int main(void)
     CU_add_test(ps_game, "test_winner_is",          test_winner_is);
     CU_add_test(ps_game, "test_get_current_player", test_get_current_player);
     CU_add_test(ps_game, "test_get_last_player",    test_get_last_player);
+	CU_add_test(ps_game, "test_human_player",       test_human_player);
+	CU_add_test(ps_game, "test_computer_player",    test_computer_player);
     CU_add_test(ps_game, "test_get_user_input",     test_get_user_input);
     CU_add_test(ps_game, "test_get_window",         test_get_window);
 	
@@ -51,9 +53,12 @@ int main(void)
     CU_add_test(ps_move, "test_valid_move",        test_valid_move);
     CU_add_test(ps_move, "test_valid_moves_left",  test_valid_moves_left);
     CU_add_test(ps_move, "test_make_move",         test_make_move);
+    CU_add_test(ps_move, "test_get_reasoned_move",      test_get_reasoned_move);
     CU_add_test(ps_move, "test_undo_move",         test_undo_move);
     CU_add_test(ps_move, "test_get_score",         test_get_score);
     CU_add_test(ps_move, "test_get_strength",      test_get_strength);
+    CU_add_test(ps_move, "test_min_value",         test_min_value);
+	
 	
     /* Set the basic run mode and run all suites */
     CU_basic_set_mode(CU_BRM_VERBOSE);

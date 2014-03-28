@@ -51,6 +51,8 @@ static int get_window  (      INT8     *combos,
 void test_winner_is         (void);
 void test_get_current_player(void);
 void test_get_last_player   (void);
+void test_human_player      (void);
+void test_computer_player   (void);
 void test_get_user_input    (void);
 void test_get_window        (void);
 #endif /* UNIT_TEST */

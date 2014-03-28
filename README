@@ -1,0 +1,10 @@
+***** Building the Connect 4 game *****
+
+1) make
+2) ./connect4 (to run the game)
+
+*** Note ***
+Ignore the warnings about const pointers
+In principle, no change is made to the structures
+but the way they work, requires some changes to 
+be made, which are then reverted back

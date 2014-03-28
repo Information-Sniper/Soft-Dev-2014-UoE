@@ -1,4 +1,4 @@
-CC = gcc
+CC = pgcc
 EXE = connect4
 
 MF= Makefile
@@ -19,7 +19,6 @@ INC= \
 	move.h \
 	game.h \
 	connect4.h
-
 
 #
 # No need to edit below this line
