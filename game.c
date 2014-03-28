@@ -18,25 +18,15 @@ int get_score(point_t *points[])
 		}
 		else if (get_state(points[i]) == PLAYER_TWO)
 		{
-			player_2++;
+			player_2--;
 		}
 	}
-
-	if ((player_1 + player_2 > 0) && (!(player_1 > 0 && player_2 > 0)))
-	{
-		return (player_1 != 0) ? player_1 : player_2;
-	}
-	else
-	{
-		return 0;
-	}
 	
-/*	
 	if (player_1 > 0 && player_2 == 0)
 	{
 		return player_1;
 	}
-	else if (player_2 > 0 && player_1 == 0)
+	else if (player_2 < 0 && player_1 == 0)
 	{
 		return player_2;
 	}
@@ -44,9 +34,13 @@ int get_score(point_t *points[])
 	{
 		return 0;
 	}
-*/
 }
 
+
+/* 
+ * get_score() always returns positive number.
+ * winner_is() cannot return PLAYER_TWO
+ */
 int winner_is(board_t *b)
 {
 	int i;
