@@ -4,22 +4,19 @@
 
 int main(void) 
 {
-	INT8    input;
+	INT8    move;
 	INT8    winner;
 	INT8    player_2;
-	INT8    flag;
 	board_t b;
 	
 	board_init(&b);
 	puts("\nWelcome to a new game of connect 4!\n");
 	fputs("Press 1 to play against the computer, or 2 to play against a friend: ", stdout);
 	
-	while(get_user_input(&input, 2))
+	while(get_user_input(&player_2, 2))
 	{
 		fputs("Invalid input. Please choose between 1 and 2: ", stdout);
 	}
-
-	player_2 = input - 1;
 	
 	board_display(&b);
 	
@@ -27,51 +24,21 @@ int main(void)
 	{
 		if (get_current_player(&b) == PLAYER_ONE)	
 		{
-			do
-			{
-				fputs("Player 1 turn: ", stdout);
-			
-				if (!get_user_input(&input, COLS))
-				{
-					if (valid_move(&b, input))
-					{
-						flag = 0;
-					}
-					else
-					{
-						printf("Column %d is full\n", input);
-						flag = 1;
-					}
-				}
-				else
-				{
-					puts("Invalid input");
-					printf("You have to input a number between 1 and %d\n", COLS);
-					flag = 1;
-				}
-			} while (flag);
+			move = human_player(&b, PLAYER_ONE);
 		}
 		else
 		{
-			if (!player_2)  /* vs. computer */
+			if (player_2 == COMPUTER)
 			{
-				input = get_reasoned_move(&b);
-				printf("Computer played: %d\n", input);
+				move = computer_player(&b);
 			}
 			else
 			{
-				fputs("Player 2 turn: ", stdout);
-				
-				while (get_user_input(&input, COLS))
-				{
-					puts("Invalid input");
-					printf("You have to input a number between 1 and %d\n", COLS);
-					fputs("Player 2 turn: ", stdout);
-				}
+				move = human_player(&b, PLAYER_TWO);
 			}
 		}
 		
-		make_move(&b, input);
+		make_move(&b, move);
 		board_display(&b);
 		winner = winner_is(&b);
 		
@@ -79,7 +46,7 @@ int main(void)
 
 	if (winner == PLAYER_ONE)
 	{
-		if (!player_2)
+		if (player_2 == COMPUTER)
 		{
 			puts("Congratulations! You won!");
 		}
@@ -90,7 +57,7 @@ int main(void)
 	}
 	else if (winner == PLAYER_TWO)
 	{
-		if (!player_2)
+		if (player_2 == COMPUTER)
 		{
 			puts("You lost...");
 		}

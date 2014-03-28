@@ -35,6 +35,9 @@
 #define PLAYER_ONE  1
 #define PLAYER_TWO -1
 #define NONE		0
+#define COMPUTER	1
+#define HUMAN		2
+
 
 /* The 4 directions a player can win */
 typedef enum

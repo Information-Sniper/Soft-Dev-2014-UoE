@@ -12,6 +12,13 @@ INT8 get_current_player(const board_t *b);
 INT8 get_last_player   (const board_t *b);
 
 /*
+ * Return a move by the player that
+ * is guaranteed to be valid
+ */
+INT8 human_player      (const board_t *b, INT8 player);
+INT8 computer_player   (const board_t *b);
+
+/*
  * If return value is ERR_SUCCESS, "input" is 
  * guaranteed to be a positive integer up to
  * "max". Else, its value is undefined.

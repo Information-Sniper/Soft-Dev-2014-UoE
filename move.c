@@ -5,13 +5,13 @@
 
 INT8 valid_move(const board_t *b, INT8 col)
 {
-	if (col < 1 || col > COLS)
+	if (col < 0 || col >= COLS)
 	{
 		return 0;
 	}
 	else
 	{
-		return b->heights[col - 1] < ROWS;
+		return b->heights[col] < ROWS;
 	}
 }
 
@@ -22,14 +22,13 @@ short valid_moves_left(const board_t *b)
 
 int make_move(board_t *b, INT8 col)
 {
-	int i = col - 1;
-	int error = board_set_point(b, i, b->heights[i], b->cur_plr);
+	int error = board_set_point(b, col, b->heights[col], b->cur_plr);
 
 	if (error == ERR_SUCCESS)
 	{
-		b->heights[i]++;
+		b->heights[col]++;
 		b->last_move++;
-		b->moves[b->last_move] = i;
+		b->moves[b->last_move] = col;
 		b->cur_plr = -b->cur_plr;
 	}
 
@@ -46,9 +45,9 @@ int get_reasoned_move(board_t *b)
 	{
 		moves[i] = INT_MIN;
 		
-		if (valid_move(b, i + 1))
+		if (valid_move(b, i))
 		{
-			make_move(b, i + 1);
+			make_move(b, i);
 			moves[i] = min_value(b, DIFFICULTY);
 
 			if (moves[i] >= moves[highest])
@@ -58,7 +57,7 @@ int get_reasoned_move(board_t *b)
 			undo_move(b);
 		} 
 	}
-	return highest + 1;
+	return highest;
 }
 
 static int undo_move(board_t *b)
@@ -171,7 +170,7 @@ static INT8 get_score(POINT *p, INT8 increment)
  *  *b: pointer to an initialized board structure
  */
 
-static int get_strength(board_t *b)
+static int get_strength(const board_t *b)
 {
 	short  weights[] = {0, 1, 10, 50, 600};
 	INT8   score;
@@ -239,9 +238,9 @@ static int min_value(board_t *b, INT8 ply)
 	{
 		moves[i] = INT_MAX;
 		
-		if (valid_move(b, i + 1))
+		if (valid_move(b, i))
 		{
-			make_move(b, i + 1);
+			make_move(b, i);
 			
 			if ((winner_is(b) == NONE) && ply > 0)
 			{

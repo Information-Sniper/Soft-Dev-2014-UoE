@@ -1,11 +1,11 @@
-CC = pgcc
+CC = gcc
 EXE = connect4
 
 MF= Makefile
 
-CFLAGS= -fastsse
+CFLAGS= -O3
 
-LFLAGS= -lm
+LFLAGS=
 
 SRC= \
 	main.c \

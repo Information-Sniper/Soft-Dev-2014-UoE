@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "defines.h"
 #include "board.h"
+#include "move.h"
 #include "game.h"
 
 /*
@@ -65,6 +66,48 @@ INT8 get_current_player(const board_t *b)
 INT8 get_last_player(const board_t *b)
 {
 	return -b->cur_plr;
+}
+
+INT8 human_player(const board_t *b, INT8 player)
+{
+	INT8 input;
+	INT8 flag;
+	
+	player = (player == PLAYER_ONE) ? 1 : 2;
+
+	do
+	{
+		printf("Player %d turn: ", player);
+	
+		if (!get_user_input(&input, COLS))
+		{
+			if (valid_move(b, input - 1))
+			{
+				flag = 0;
+			}
+			else
+			{
+				printf("Column %d is full\n", input);
+				flag = 1;
+			}
+		}
+		else
+		{
+			puts("Invalid input");
+			printf("You have to input a number between 1 and %d\n", COLS);
+			flag = 1;
+		}
+	} while (flag);
+	
+	return input - 1;
+}
+
+INT8 computer_player(const board_t *b)
+{
+	INT8 move = get_reasoned_move(b);
+	printf("Computer played: %d\n", move + 1);
+	
+	return move;
 }
 
 /*
