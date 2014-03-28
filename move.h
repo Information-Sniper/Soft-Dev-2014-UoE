@@ -5,9 +5,12 @@
 #include "board.h"
 
 /* public functions */
+/* the counting in move functions is 0 based */
 INT8   valid_move       (const board_t *b, INT8 col);
 short  valid_moves_left (const board_t *b);
 int    make_move        (board_t *b, INT8 col);
+
+/* returns best move to be played by the computer */
 INT8   get_reasoned_move(board_t *b);
 
 /* private functions */

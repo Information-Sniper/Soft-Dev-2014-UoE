@@ -157,9 +157,10 @@ static INT8 get_score(POINT *p, INT8 increment)
 }
 
 
+
 /*
- * OUT:   sum
- *  IN:  *b
+ * Return: sum
+ *  Input:*b
  *
  * sum: An integer that is the sum of the scores
  *      of all possible winning combinations in
@@ -228,6 +229,11 @@ static int get_strength(const board_t *b)
 	
 	return sum;
 }
+
+/* 
+ * Minimization helper function used
+ * by the computer to make moves
+ */
 
 static int min_value(board_t *b, INT8 ply)
 {
