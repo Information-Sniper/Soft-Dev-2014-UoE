@@ -1,7 +1,8 @@
 #include <CUnit/CUnit.h>
-#include "defines.h"
-#include "board.h"
-#include "game.h"
+#include "../defines.h"
+#include "../board.h"
+#include "../game.h"
+#include "../game.c"
 
 void test_get_user_input(void)
 {

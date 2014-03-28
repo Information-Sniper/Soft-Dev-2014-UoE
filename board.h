@@ -22,7 +22,7 @@ typedef struct board
 } board_t;
 
 /* Initializes the board */
-void board_init((board_t *b);
+void board_init(board_t *b);
 
 /* Prints the curent state of the board */
 void board_display(const board_t *b);

@@ -5,13 +5,13 @@
 
 INT8 valid_move(const board_t *b, INT8 col)
 {
-	if (col < 0 || col >= COLS)
+	if (col < 1 || col > COLS)
 	{
 		return 0;
 	}
 	else
 	{
-		return b->heights[col] < ROWS;
+		return b->heights[col - 1] < ROWS;
 	}
 }
 
@@ -22,13 +22,14 @@ short valid_moves_left(const board_t *b)
 
 int make_move(board_t *b, INT8 col)
 {
-	int error = board_set_point(b, col, b->heights[col], b->cur_plr);
+	int i = col - 1;
+	int error = board_set_point(b, i, b->heights[i], b->cur_plr);
 
 	if (error == ERR_SUCCESS)
 	{
-		b->heights[col]++;
+		b->heights[i]++;
 		b->last_move++;
-		b->moves[b->last_move] = col;
+		b->moves[b->last_move] = i;
 		b->cur_plr = -b->cur_plr;
 	}
 
@@ -45,9 +46,9 @@ int get_reasoned_move(board_t *b)
 	{
 		moves[i] = INT_MIN;
 		
-		if (valid_move(b, i))
+		if (valid_move(b, i + 1))
 		{
-			make_move(b, i);
+			make_move(b, i + 1);
 			moves[i] = min_value(b, DIFFICULTY);
 
 			if (moves[i] >= moves[highest])
@@ -57,48 +58,14 @@ int get_reasoned_move(board_t *b)
 			undo_move(b);
 		} 
 	}
-	return highest;
+	return highest + 1;
 }
-
-static int min_value(board_t *b, INT8 ply)
-{
-	int moves[COLS];
-	int lowest = 0;
-	int i;
-	
-	for (i = 0; i < COLS; i++)
-	{
-		moves[i] = INT_MAX;
-		
-		if (valid_move(b, i))
-		{
-			make_move(b, i);
-			
-			if ((winner_is(b) == NONE) && ply > 0)
-			{
-				moves[i] = min_value(b, ply - 1);
-			}
-			else 
-			{
-				moves[i] = get_strength(b);
-			}
-			
-			if (moves[i] < moves[lowest])
-			{
-				lowest = i;
-			}
-			undo_move(b);
-		}
-	}
-	return moves[lowest];
-}
-
 
 static int undo_move(board_t *b)
 {
 	INT8 x;
 	INT8 y;
-	int   error;
+	int  error;
 	
 	if (b->last_move >= 0)
 	{
@@ -272,9 +239,9 @@ static int min_value(board_t *b, INT8 ply)
 	{
 		moves[i] = INT_MAX;
 		
-		if (valid_move(b, i))
+		if (valid_move(b, i + 1))
 		{
-			make_move(b, i);
+			make_move(b, i + 1);
 			
 			if ((winner_is(b) == NONE) && ply > 0)
 			{
@@ -282,7 +249,7 @@ static int min_value(board_t *b, INT8 ply)
 			}
 			else 
 			{
-				moves[i] = get_strength(b);
+				moves[i] = -get_strength(b);
 			}
 			
 			if (moves[i] < moves[lowest])

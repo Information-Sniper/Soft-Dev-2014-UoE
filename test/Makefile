@@ -1,26 +1,25 @@
 CC = pgcc
-EXE = connect4
+EXE = test_connect4
 
-MF= Makefile
+MF = Makefile
 
-CFLAGS= -fastsse
+CFLAGS = -O0 -DUNIT_TEST -I~/local/include
 
-LFLAGS= -lm
+LFLAGS = -L~/local/lib -lcunit
 
-SRC= \
-	main.c \
-	board.c \
-	move.c \
-	game.c
+SRC = \
+	test_board.c \
+	test_move.c \
+	test_game.c \
+	test_main.c
 
-INC= \
-	defines.h \
-	board.h \
-	move.h \
-	game.h \
-	connect4.h
-
-
+INC = \
+	../defines.h \
+	../board.h \
+	../move.h \
+	../game.h \
+	../connect4.h
+	
 #
 # No need to edit below this line
 #

@@ -1,6 +1,7 @@
 #include <CUnit/CUnit.h>
-#include "defines.h"
-#include "board.h"
+#include "../defines.h"
+#include "../board.h"
+#include "../board.c"
 
 void test_board_init(void)
 {

@@ -1,6 +1,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
-#include "connect4.h"
+#include "../connect4.h"
 
 /* Run test suite */
 int main(void)

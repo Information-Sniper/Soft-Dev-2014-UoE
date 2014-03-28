@@ -76,7 +76,7 @@ INT8 get_last_player(const board_t *b)
  * of completeness.
  */
 
-int get_user_input(INT8 *input)
+int get_user_input(INT8 *input, INT8 max)
 {
 	char   buf[32];
 	char  *rem_str;
@@ -91,7 +91,7 @@ int get_user_input(INT8 *input)
 	     rem_str[1] == '\0') &&   /*    is a number         */
 	    !(num - (int) num)   &&   /* 2) if it is an integer */
 		num > 0.0            &&   /* 3) if positive         */
-		num <= 127.0)             /* 4) up to 127           */
+		(INT8) num <= max)        /* 4) up to "max"         */
 
 	{
 		*input = (INT8) num;

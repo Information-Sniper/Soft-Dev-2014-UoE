@@ -1,7 +1,8 @@
 #include <CUnit/CUnit.h>
-#include "defines.h"
-#include "board.h"
-#include "move.h"
+#include "../defines.h"
+#include "../board.h"
+#include "../move.h"
+#include "../move.c"
 
 /* assuming rows = 6, cols = 7 */
 void test_valid_move(void)

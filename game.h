@@ -14,9 +14,9 @@ INT8 get_last_player   (const board_t *b);
 /*
  * If return value is ERR_SUCCESS, "input" is 
  * guaranteed to be a positive integer up to
- * 127. Else, its value is undefined.
+ * "max". Else, its value is undefined.
  */
-int get_user_input(INT8 *input);
+int get_user_input(INT8 *input, INT8 max);
 
 /* private function */
 
