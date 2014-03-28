@@ -1,129 +1,114 @@
-#include <stdlib.h>
 #include "defines.h"
-#include "point.h"
 #include "board.h"
 
-board_t *create_board(int x, int y)
+/*
+ * Player 1 starts the game.
+ * All arrays are empty.
+ * last_move is -1, because it is an
+ * index. When the first move is played,
+ * it will be kept in moves[last_move],
+ * which is moves[0]
+ */
+void board_init(board_t *b)
 {
-	board_t *b = (board_t*) malloc(sizeof(board_t));
-	int i;
-	int j;
-	
-	b->cols = x;
-	b->rows = y;
-	b->lm = -1;
-	b->current_player = PLAYER_ONE;
-	b->heights = (int*) malloc(x * sizeof(int));
-	b->grid = (point_t***) malloc(x * sizeof(point_t**));
+	INT8 x, y;
 
+	b->last_move = -1;
+	b->cur_plr = PLAYER_ONE;
 	
-	for (i = 0; i < x; i++)
+	for (x = 0; x < X_DIM; x++)
 	{
-		b->grid[i] = (point_t**) malloc(y * sizeof(point_t*));
-		b->heights[i] = 0;
-		
-		for (j = 0; j < y; j++)
+		for (y = 0; y < Y_DIM; y++)
 		{
-			b->grid[i][j] = new_point(i, j);
+			b->grid[x][y] = NONE;
 		}
+		b->heights[x] = 0;
 	}
-	b->moves = (int*) malloc(x * y * sizeof(int));
-
-	b->cl = generate_CL(b->grid);
-	
-	return b;
-}
-
-void delete_board(board_t *b)
-{
-	free(b->cl);
-	free(b->grid);
-	free(b->heights);
-	free(b->moves);
-	free(b);
 }
 
 /* 
- * creates all possible win combinations
- * currently hardcoded for a 7x6 board
+ * Prints "O", "X" or "-", depending on the value
+ * of the cell, for player 1, player 2 or none.
+ * Also prints the column numbers at the bottom.
  */
-point_t ***generate_CL(point_t ***grid)
+void board_display(const board_t *b)
 {
-	point_t ***lines = (point_t***) malloc(POS_COMBOS * sizeof(point_t**));
-	int i;
-	int count = 0;
-	int y;
-	int x;
-	int t;
+	int  i;
+	int  j;
+	char point;
 	
-	for (i = 0; i < POS_COMBOS; i++)
+	for (j = Y_DIM - 1; j >= 0; j--)
 	{
-		lines[i] = (point_t**) malloc(4 * sizeof(point_t*));
+		putchar('|');
+		
+		for (i = 0; i < X_DIM; i++)
+		{
+			point = b->grid[i][j];
+			
+			if (point == PLAYER_ONE)
+			{
+				putchar('O');
+			}
+			else if (point == PLAYER_TWO)
+			{
+				putchar('X');
+			}
+			else
+			{
+				putchar('-');
+			}
+		}
+		puts("|");
 	}
 	
-	/* creates all horizontal win combinations */
-	for (y = 0; y < 6; y++)
+	putchar(' ');
+	
+	for (i = '1'; i <= '0' + X_DIM; i++)
 	{
-		for (x = 0; x < 4; x++)
-		{
-		//	lines[count] = (point_t**) malloc(4 * sizeof(point_t*));
-			point_t **temp = (point_t**) malloc(4 * sizeof(point_t*));
+		putchar(i);
+	}
+	
+	puts("\n");
+}
 
-			for (i = x; i < x + 4; i++)
-			{
-			//	lines[count][i - x] = grid[i][y];
-				temp[i - x] = grid[i][y];
-			}
-			lines[count] = temp;
-			count++;			
-		}
-	}
-	
-	
-	/* creates all vertical win combinations */
-	for (x = 0; x < 7; x++)
-	{
-		for (y = 0; y < 3; y++)
-		{
-			point_t **temp = (point_t**) malloc(4 * sizeof(point_t*));
-			for (i = y; i < y + 4; i++)
-			{
-				temp[i - y] = grid[x][i];
-			}
-			lines[count] = temp;
-			count++;
-		}
+int board_set_point(board_t *b, INT8 x, INT8 y, INT8 player)
+{
+	int error;
 
-	}
-
-	/* creates all "/" diagonal win combinations */
-	for (x = 0; x < 4; x++)
+	if (x < 0 || x >= X_DIM ||
+	    y < 0 || y >= Y_DIM)
 	{
-		for (y = 0; y < 3; y++)
-		{
-			point_t **temp = (point_t**) malloc(4 * sizeof(point_t*));
-			for (t = x, i = y; t < x + 4 && i < y + 4; t++, i++)
-			{
-				temp[i - y] = grid[t][i];
-			}
-			lines[count] = temp;
-			count++;
-		}
+		error = ERR_OUT_OF_BOUNDS;
+	}
+	else if (player != PLAYER_ONE &&
+	         player != PLAYER_TWO &&
+	         player != NONE)
+	{
+		error = ERR_INVALID_INPUT;
+	}
+	else
+	{
+		b->grid[x][y] = player;
+		error = ERR_SUCCESS;
 	}
 	
-	/* creates all "\" diagonal win combinations */
-	for (x = 0; x < 4; x++)
+	return error;
+}
+
+int board_get_point(POINT *p, const board_t *b, INT8 x, INT8 y)
+{
+	int error;
+	
+	if (x < 0 || x >= X_DIM ||
+	    y < 0 || y >= Y_DIM)
 	{
-		for (y = 5; y > 2; y--)
-		{
-			point_t **temp = (point_t**) malloc(4 * sizeof(point_t*));
-			for (t = x, i = y; t < x + 4 && i > -1; t++, i--)
-			{
-				temp[t - x] = grid[t][i];
-			}
-			lines[count] = temp;
-			count++;
-		}
+		error = ERR_OUT_OF_BOUNDS;
 	}
-	return lines;
+	else
+	{
+		*p = b->grid[x][y];
+		error = ERR_SUCCESS;
+	}
+	
+	return error;
 }

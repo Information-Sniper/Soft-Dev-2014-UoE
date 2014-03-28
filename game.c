@@ -1,98 +1,179 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "defines.h"
-#include "point.h"
 #include "board.h"
 #include "game.h"
 
-int get_score(point_t *points[])
-{
-	int player_1 = 0;
-	int player_2 = 0;
-	int i;
-	
-	for (i = 0; i < 4; i++)
-	{
-		if (get_state(points[i]) == PLAYER_ONE)
-		{
-			player_1++;
-		}
-		else if (get_state(points[i]) == PLAYER_TWO)
-		{
-			player_2--;
-		}
-	}
-	
-	if (player_1 > 0 && player_2 == 0)
-	{
-		return player_1;
-	}
-	else if (player_2 < 0 && player_1 == 0)
-	{
-		return player_2;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-
-/* 
- * get_score() always returns positive number.
- * winner_is() cannot return PLAYER_TWO
+/*
+ * Checks all combinations that contain the last played
+ * token. If in one of these, all tokens belong to the 
+ * last player, the function returns it. Else, the 
+ * function returns NONE.
  */
-int winner_is(board_t *b)
+INT8 winner_is(const board_t *b)
 {
-	int i;
-	
-	for (i = 0; i < POS_COMBOS; i++)
+	INT8   last_player = get_last_player(b);
+	INT8   combos;
+	POINT *point;
+	INT8   i, j;
+	INT8   incr;
+	int    dir;
+
+	if (b->last_move < 0)
 	{
-		if (get_score(b->cl[i]) == 4)
+		return NONE;
+	}
+	
+	for (dir = HORIZONTAL; dir < DIRECTIONS; dir++)
+	{
+		get_window(&combos, &point, &incr, b, dir);
+		
+		for (i = 0; i < combos; i++)
 		{
-			return PLAYER_ONE;
-		}
-		else if (get_score(b->cl[i]) == -4)
-		{
-			return PLAYER_TWO;
+			for (j = 0; j < FOUR; j++)
+			{
+				/*
+				 * This is a bit hacky, but also clever.
+				 * "point" points to the first value of 
+				 * a combo. If we increment it by the 
+				 * right amount, we can find the other
+				 * 3 points that make the line.
+				 */
+				if (point[j * incr] != last_player)
+				{
+					break;
+				}
+			}
+			
+			if (j == FOUR)
+			{
+				return last_player;	
+			}
+			
+			point += incr;
 		}
 	}
 	
 	return NONE;
 }
 
-int get_current_player(board_t *b)
+INT8 get_current_player(const board_t *b)
 {
-	return b->current_player;
+	return b->cur_plr;
 }
 
-char *to_string(board_t *b)
+INT8 get_last_player(const board_t *b)
 {
-	char *temp = (char*) malloc(b->rows * (b->cols + 1) * sizeof(char) + 1);
+	return -b->cur_plr;
+}
 
-	char *curr = temp;
-	int x;
-	int y;
+/*
+ * Using strtod() we can have a parser
+ * basically for free, without having
+ * to worry about the user inputing 
+ * legitimate numbers in "weird formats"  
+ * and discard them. Just for the sake 
+ * of completeness.
+ */
+
+int get_user_input(INT8 *input)
+{
+	char   buf[32];
+	char  *rem_str;
+	int    error;
+	double num;
+
+	fgets(buf, 32, stdin);
 	
-	for (y = b->rows - 1; y > -1; y--)
+	num = strtod(buf, &rem_str);
+
+	if ((rem_str[0] == '\0'  ||   /* 1) if the whole string */
+	     rem_str[1] == '\0') &&   /*    is a number         */
+	    !(num - (int) num)   &&   /* 2) if it is an integer */
+		num > 0.0            &&   /* 3) if positive         */
+		num <= 127.0)             /* 4) up to 127           */
+
 	{
-		for (x = 0; x < b->cols; x++)
-		{
-			if (get_state(b->grid[x][y]) == EMPTY)
-			{
-				*curr = '-';
-			}
-			else if (get_state(b->grid[x][y]) == PLAYER_ONE)
-			{
-				*curr = 'O';
-			}
-			else
-			{
-				*curr = 'X';
-			}
-			curr++;
-		}
-		*curr = '\n';
-		curr++;
+		*input = (INT8) num;
+		error = ERR_SUCCESS;
 	}
-	return temp;
+	else
+	{
+		error = ERR_INVALID_INPUT;
+	}
+	
+	return error;
+}
+
+/*
+ * This function does some horrible number manipulation
+ * to discover the number of combos that are possible 
+ * from the last token played for a direction. It basically
+ * calculates which should be the starting point, and how
+ * many times the "mask of 4" can move in "direction"
+ * without going out of bounds.
+ */
+static int get_window(INT8 *combos, POINT **p, INT8 *ptr_incr,
+			          const board_t *b, int direction)
+{
+	INT8 x = b->moves[b->last_move];
+	INT8 y = b->heights[x] - 1;
+	INT8 start_x;
+	INT8 start_y;
+	INT8 tmp;
+	int error = ERR_SUCCESS;
+
+	switch (direction)
+	{
+	case HORIZONTAL:
+		start_x = MAX(x - (FOUR - 1), 0);
+		start_y = y;
+		*combos = MIN(x - start_x + 1,
+                      COLS - (start_x + FOUR - 1));
+		*ptr_incr = Y_DIM;
+		break;
+	case VERTICAL:
+		start_x = x;
+		start_y = MAX(y - (FOUR - 1), 0);
+		*combos = MIN(y - start_y + 1,
+		              Y_DIM - (start_y + FOUR - 1));
+		*ptr_incr = 1;
+		break;
+	case DOWNLEFT_UPRIGHT:
+		tmp = MIN(MIN(x, y), FOUR - 1);
+		start_x = x - tmp;
+		start_y = y - tmp;
+		
+		*combos = MIN(MIN(x - start_x + 1,
+                          COLS - (start_x + FOUR - 1)),
+					  MIN(y - start_y + 1,
+		                  Y_DIM - (start_y + FOUR - 1)));
+		
+		*ptr_incr = Y_DIM + 1;
+		break;
+	case UPLEFT_DOWNRIGHT:
+		tmp = MIN(MIN(x, Y_DIM - y - 1), FOUR - 1);
+		start_x = x - tmp;
+		start_y = y + tmp;
+		
+		*combos = MIN(MIN(x - start_x + 1,
+                          COLS - (start_x + FOUR - 1)),
+					  MIN(start_y - y + 1,
+					      start_y - (FOUR - 1) + 1));
+	  
+		*ptr_incr = Y_DIM - 1;
+		break;
+	default:
+		error = ERR_INVALID_INPUT;
+		break;
+	}
+
+	*p = &(b->grid[start_x][start_y]);
+	
+	if (*combos < 0)
+	{
+		*combos = 0;
+	}
+	
+	return error;
 }
