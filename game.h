@@ -39,5 +39,13 @@ static int get_window  (      INT8     *combos,
 						      INT8     *ptr_incr,
 			            const board_t  *b,
 						      int       direction);
-							  
+
+#ifdef UNIT_TEST
+void test_winner_is         (void);
+void test_get_current_player(void);
+void test_get_last_player   (void);
+void test_get_user_input    (void);
+void test_get_window        (void);
+#endif /* UNIT_TEST */
+
 #endif /* GAME_H */

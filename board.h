@@ -33,4 +33,11 @@ int board_set_point(board_t *b, INT8 x, INT8 y, INT8 player);
 /* Outputs point (x,y)'s state to "p". Returns error value */
 int board_get_point(POINT *p, const board_t *b, INT8 x, INT8 y);
 
+#ifdef UNIT_TEST
+void test_board_init     (void);
+void test_board_display  (void);
+void test_board_set_point(void);
+void test_board_get_point(void);
+#endif /* UNIT_TEST */
+
 #endif // BOARD_H
