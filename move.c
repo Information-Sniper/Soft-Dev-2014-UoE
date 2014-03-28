@@ -89,16 +89,17 @@ int get_reasoned_move(board_t *b)
 
 int get_strength(board_t *b)
 {
-	int sum = 0;
 	int weights[] = {0, 1, 10, 50, 600};
+	int score;
+	int sum = 0;
 	int i;
 	
 	for (i = 0; i < POS_COMBOS; i++)
 	{
-		sum += weights[abs(get_score(b->cl[i]))];
+		score = get_score(b->cl[i]);
+		sum += (score > 0) ? weights[abs(score)] : -weights[abs(score)];
 	}
-	
-	return sum + 16;
+	return sum + (get_current_player(b) == PLAYER_ONE ? 16 : -16);
 }
 
 // don't change this unless you understand it
